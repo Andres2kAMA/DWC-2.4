@@ -12,7 +12,7 @@ class Buscaminas {
             this.tableroComprobado[i] = [];
             for (let j = 0; j < this.tableroAComprobar[i].length; j++) {
 
-                //Creo las 7 variables necesarias
+                //Creo las 4 variables necesarias
                 var posicionI = i;
                 var posicionJ = j;
                 var limitesTablero = [];
@@ -25,7 +25,7 @@ class Buscaminas {
                 if (this.tableroAComprobar[i][j] == -1) {
                     this.tableroComprobado[i][j] = -1;
                 } else {
-                    this.tableroComprobado[i][j] = this.comprobarMinas(posicionI, posicionJ, limites);
+                    this.tableroComprobado[i][j] = this.comprobarMinas(limites);
                 }
             }
 
@@ -101,7 +101,7 @@ class Buscaminas {
     }
 
     //Compruebo las minas alrededor de la posición
-    comprobarMinas(posicionI, posicionJ, limites) {
+    comprobarMinas(limites) {
         var contador = 0;
 
         for (let i = limites[0]; i <= limites[1]; i++) {
@@ -120,9 +120,6 @@ class Buscaminas {
         console.log("Tablero sin comprobar");
         for (let i = 0; i < this.tableroAComprobar.length; i++) {
             console.log(this.tableroAComprobar[i]);
-
-            for (let j = 0; j < this.tableroAComprobar[i].length; j++) {
-            }
         }
         console.log(' ');
     }
@@ -132,9 +129,6 @@ class Buscaminas {
         console.log("Tablero comprobado");
         for (let i = 0; i < this.tableroAComprobar.length; i++) {
             console.log(this.tableroComprobado[i]);
-            
-            for (let j = 0; j < this.tableroAComprobar[i].length; j++) {
-            }
         }
     }
 
