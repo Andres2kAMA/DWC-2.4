@@ -8,23 +8,25 @@ class Buscaminas {
 
     //Método principal
     calcularMinasAdyacentes() {
+        /*
+        Creo los arrays donde voy a introducir los límites.
+        En el primero voy a introducir los límites del tablero. Por tanto, como el tablero siempe es el mismo,
+        sólo se ejecutará una vez
+        En el segundo voy a introducir los límites de cada posición, siempre y cuandoe esta no tenga un valor de -1
+        */
+        var limitesTablero = [];
+        var limites = [];
+
+        limitesTablero = this.devolverLimitesDelTablero();
+
         for (let i = 0; i < this.tableroAComprobar.length; i++) {
             this.tableroComprobado[i] = [];
+
             for (let j = 0; j < this.tableroAComprobar[i].length; j++) {
-
-                //Creo las 4 variables necesarias
-                var posicionI = i;
-                var posicionJ = j;
-                var limitesTablero = [];
-                var limites = [];
-
-                limitesTablero = this.devolverLimitesDelTablero();
-
-                limites = this.devolverLimites(posicionI, posicionJ, limitesTablero);
-
                 if (this.tableroAComprobar[i][j] == -1) {
                     this.tableroComprobado[i][j] = -1;
                 } else {
+                    limites = this.devolverLimites(i, j, limitesTablero);
                     this.tableroComprobado[i][j] = this.comprobarMinas(limites);
                 }
             }
@@ -34,70 +36,88 @@ class Buscaminas {
 
     //Devuelvo los limetes del tablero
     devolverLimitesDelTablero() {
-        var limitesTablero = [0, this.tableroAComprobar.length - 1, 0, this.tableroAComprobar.length ];
+        var limitesTablero = [this.tableroAComprobar.length - 1, this.tableroAComprobar[0].length - 1];
         return limitesTablero;
     }
 
     //Devuelvo los límites según la posición que quiero comprobar
-    devolverLimites(posicionI, posicionJ, limitesTablero) {
+    devolverLimites(posicionX, posicionY, limitesTablero) {
         var limites = [];
 
-        if (posicionI > limitesTablero[0] && posicionI < limitesTablero[1] && posicionJ > limitesTablero[2] && posicionJ < limitesTablero[3]) {
-            limites[0] = posicionI - 1;
-            limites[1] = posicionI + 1;
-            limites[2] = posicionJ - 1;
-            limites[3] = posicionJ + 1;
+        if (posicionX > 0 && posicionX < limitesTablero[1] && posicionY > 0 && posicionY < limitesTablero[3]) {
+            limites[0] = posicionX - 1;
+            limites[1] = posicionX + 1;
+            limites[2] = posicionY - 1;
+            limites[3] = posicionY + 1;
 
-        } else if (posicionI == limitesTablero[0] || posicionI == limitesTablero[1]) {
+        } else {
+            if (!this.hayCasillasArriba(posicionX)) {
+                if (!this.hayCasillasIzquierda(posicionY)) {
+                    limites[0] = posicionX;
+                    limites[1] = posicionX + 1;
+                    limites[2] = posicionY;
+                    limites[3] = posicionY + 1;
 
-            if (posicionI == limitesTablero[0]) {
-
-                if (posicionJ == limitesTablero[2]) {
-                    limites[0] = posicionI;
-                    limites[1] = posicionI + 1;
-                    limites[2] = posicionJ;
-                    limites[3] = posicionJ + 1;
-
-                } else {
-                    limites[0] = posicionI;
-                    limites[1] = posicionI + 1;
-                    limites[2] = posicionJ - 1;
-                    limites[3] = posicionJ + 1;
+                } else if (!this.hayCasillasDerecha(posicionY, limitesTablero[1])){
+                    limites[0] = posicionX;
+                    limites[1] = posicionX + 1;
+                    limites[2] = posicionY - 1;
+                    limites[3] = posicionY + 1;
+                }else{
+                    limites[0] = posicionX;
+                    limites[1] = posicionX +1;
+                    limites[2] = posicionY - 1;
+                    limites[3] = posicionY + 1;
                 }
 
-            } else {
+            } else if (!this.hayCasillasAbajo(posicionX, limitesTablero[0])) {
+                if (!this.hayCasillasIzquierda(posicionY)) {
+                    limites[0] = posicionX - 1;
+                    limites[1] = posicionX;
+                    limites[2] = posicionY - 1;
+                    limites[3] = posicionY + 1;
 
-                if (posicionJ == limitesTablero[3]) {
-                    limites[0] = posicionI - 1;
-                    limites[1] = posicionI;
-                    limites[2] = posicionJ - 1;
-                    limites[3] = posicionJ;
+                } else if (!this.hayCasillasDerecha(posicionY, limitesTablero[1])) {
+                    limites[0] = posicionX - 1;
+                    limites[1] = posicionX;
+                    limites[2] = posicionY - 1;
+                    limites[3] = posicionY;
 
                 } else {
-                    limites[0] = posicionI - 1;
-                    limites[1] = posicionI;
-                    limites[2] = posicionJ - 1;
-                    limites[3] = posicionJ + 1;
+                    limites[0] = posicionX - 1;
+                    limites[1] = posicionX;
+                    limites[2] = posicionY - 1;
+                    limites[3] = posicionY + 1;
                 }
-            }
 
-        } else if (posicionJ == limitesTablero[2] || posicionJ == limitesTablero[3]) {
-
-            if (posicionJ == limitesTablero[2]) {
-                limites[0] = posicionI - 1;
-                limites[1] = posicionI + 1;
-                limites[2] = posicionJ;
-                limites[3] = posicionJ + 1;
+            } else if (!this.hayCasillasIzquierda(posicionY)) {
+                limites[0] = posicionX - 1;
+                limites[1] = posicionX + 1;
+                limites[2] = posicionY;
+                limites[3] = posicionY + 1;
 
             } else {
-                limites[0] = posicionI - 1;
-                limites[1] = posicionI + 1;
-                limites[2] = posicionJ - 1;
-                limites[3] = posicionJ;
+                limites[0] = posicionX - 1;
+                limites[1] = posicionX + 1;
+                limites[2] = posicionY - 1;
+                limites[3] = posicionY;
             }
         }
-
+        
         return limites;
+    }
+
+    hayCasillasArriba(posicionX) {
+        return (posicionX != 0);
+    }
+    hayCasillasAbajo(posicionX, ultimaFila) {
+        return (posicionX != ultimaFila);
+    }
+    hayCasillasIzquierda(posicionY) {
+        return (posicionY != 0);
+    }
+    hayCasillasDerecha(posicionY, ultimaColumna) {
+        return (posicionY != ultimaColumna);
     }
 
     //Compruebo las minas alrededor de la posición
@@ -106,11 +126,10 @@ class Buscaminas {
 
         for (let i = limites[0]; i <= limites[1]; i++) {
             for (let j = limites[2]; j <= limites[3]; j++) {
-                 if (this.tableroAComprobar[i][j] == -1) {
+                if (this.tableroAComprobar[i][j] == -1) {
                     contador++;
                 }
             }
-
         }
         return contador;
     }

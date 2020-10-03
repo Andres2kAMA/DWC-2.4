@@ -1,7 +1,5 @@
-var tablero=[[-1, 0, 0, 0],
-                [0 , 0, 0, 0],
-                [0 ,-1, 0, 0],
-                [0 , 0, 0, 0]];
+var tablero=[[-1,-1,-1],
+                [-1,0,-1]];
 
 var buscaminas = new Buscaminas(tablero);
 buscaminas.calcularMinasAdyacentes();
